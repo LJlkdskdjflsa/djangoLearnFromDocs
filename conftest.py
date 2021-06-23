@@ -1,6 +1,12 @@
 import pytest
-from django.contrib.auth.models import User
 
-@pytest.fixture()
-def user_1(db):
-    return User.objects.create_user('test_user')
+from pytest_factoryboy import register
+from factories import UserFactory
+
+register(UserFactory)
+
+
+@pytest.fixture
+def new_user1(db, user_factory):
+    user = user_factory.build()
+    return user
