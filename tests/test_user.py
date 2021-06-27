@@ -7,7 +7,7 @@ user_factory = UserFactory
 
 @pytest.mark.django_db
 def test_create_user():
-    User.objects.create_user("test", "test@test.com", "test")
+    User.objects.create_user("testqwe", "test@test.com", "testqwe")
     count = User.objects.all().count()
     assert count == 1
 
