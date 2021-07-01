@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "oauth2_provider",  # open id
     "users",
     "demo_middleware",
+    "rest_framework",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -121,6 +122,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+REST_FRAMEWORK = {
+    "Default_PERMISSION_CLASS": [
+        "rest_framework.permissions.AllowAny",
+    ]
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

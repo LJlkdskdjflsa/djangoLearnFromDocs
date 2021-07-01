@@ -5,7 +5,12 @@ from users.models import User
 
 class Category(TrackingModel):
     name = models.CharField(max_length=50)
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.SET_NULL, default=None
+    )
+
+    def __str__(self):
+        return self.name
 
 
 class Thing(TrackingModel):
@@ -28,5 +33,5 @@ class Thing(TrackingModel):
     )
     title = models.CharField(max_length=250)
     content = models.TextField(null=True)
-    slug = models.SlugField(max_length=250, unique_for_date="published")
+    slug = models.SlugField(max_length=250)
     status = models.CharField(max_length=50, choices=options, default="using")
