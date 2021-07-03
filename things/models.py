@@ -1,6 +1,7 @@
-from djongo import models
+# from djongo import models
+from django.db import models
 from helpers.models import TrackingModel
-from users.models import User
+from django.contrib.auth.models import User
 
 
 class Category(TrackingModel):

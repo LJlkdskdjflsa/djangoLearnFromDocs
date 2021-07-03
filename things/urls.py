@@ -11,7 +11,9 @@ urlpatterns = [
     path("<int:pk>/", views.ThingsDetailView.as_view(), name="detail-create"),
     path("", views.ThingsListlView.as_view(), name="list-create"),
     path(
-        "category/<int:pk>/", views.CategoriesDetailView.as_view(), name="detail-create"
+        "category/<int:pk>/",
+        views.CategoriesDetailView.as_view(),
+        name="detail-category-create",
     ),
-    path("category", views.CategoriesListlView.as_view(), name="list-create"),
+    path("category", views.CategoriesListlView.as_view(), name="list-category-create"),
 ]

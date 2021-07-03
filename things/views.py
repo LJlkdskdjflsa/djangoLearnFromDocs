@@ -2,6 +2,25 @@ from rest_framework import generics
 
 from .models import Category, Thing
 from .serializers import ThingSerializer, CategorySerializer
+from rest_framework.permissions import (
+    BasePermission,
+    IsAdminUser,
+    DjangoModelPermissionsOrAnonReadOnly,
+    IsAuthenticatedOrReadOnly,
+    DjangoModelPermissions,
+    SAFE_METHODS,
+)
+
+# 之後要獨立程一個app
+class PostUserWritePermission(BasePermission):
+    message = "Edit the Post is restricted to the owner only"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+
+        # can only access self data
+        return obj.owner == request.user
 
 
 class CategoriesListlView(generics.ListCreateAPIView):
@@ -14,11 +33,14 @@ class CategoriesDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
 
 
-class ThingsListlView(generics.ListCreateAPIView):
+class ThingsListlView(generics.ListCreateAPIView, IsAuthenticatedOrReadOnly):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
 
 
-class ThingsDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ThingsDetailView(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
+    permission_classes = [PostUserWritePermission]
+
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
