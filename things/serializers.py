@@ -8,6 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
         fields = (
             # "_id",
+            "id",
             "name",
             "created_at",
             "updated_at",

@@ -4,8 +4,9 @@ from rest_framework.test import APITestCase, APIClient
 
 from things.models import Thing, Category
 
-# from users.models import User
-from django.contrib.auth.models import User
+from users.models import User
+
+# from django.contrib.auth.models import User
 
 
 class ThingAPITest(APITestCase):
