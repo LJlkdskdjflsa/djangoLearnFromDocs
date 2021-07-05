@@ -10,6 +10,8 @@ from rest_framework.permissions import (
     DjangoModelPermissions,
     SAFE_METHODS,
 )
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 
 # 之後要獨立程一個app
 class PostUserWritePermission(BasePermission):
@@ -33,6 +35,23 @@ class CategoriesDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
 
 
+class ThingsList(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+    # Define custome queryset
+    def get_queryset(self):
+        return Thing.objects.all()
+
+    # Define custome get object
+    def get_object(self, queryset=None, **kwargs):
+        item = self.kwargs.get("pk")
+        return get_object_or_404(Thing, slug=item)
+
+
+# replace with viewsets
+"""
 class ThingsListlView(generics.ListCreateAPIView, IsAuthenticatedOrReadOnly):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Thing.objects.all()
@@ -44,3 +63,4 @@ class ThingsDetailView(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermi
 
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
+"""
