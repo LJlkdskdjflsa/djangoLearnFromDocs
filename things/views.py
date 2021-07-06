@@ -10,7 +10,7 @@ from rest_framework.permissions import (
     DjangoModelPermissions,
     SAFE_METHODS,
 )
-from rest_framework import viewsets
+from rest_framework import viewsets, filters, generics, permissions
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.permissions import (
@@ -22,11 +22,8 @@ from rest_framework.permissions import (
     IsAdminUser,
     DjangoModelPermissions,
 )
-from rest_framework import viewsets
-from rest_framework import filters
 from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework import filters
+
 
 # 之後要獨立程一個app
 class PostUserWritePermission(BasePermission):
@@ -88,7 +85,7 @@ class ThingListDetailfilter(generics.ListAPIView):
 
     # '^' Starts-with search.
     # '=' Exact matches.
-    # '@' Full-text search. (Currently only supported Django's PostgreSQL backend.)
+    # '@' Full-text search. (Currently only supported Django's ThinggreSQL backend.)
     # '$' Regex search.
 
 
@@ -98,6 +95,30 @@ class ThingSearch(generics.ListAPIView):
     serializer_class = ThingSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["^slug"]
+
+
+class CreateThing(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+
+class AdminThingDetail(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+
+class EditThing(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ThingSerializer
+    queryset = Thing.objects.all()
+
+
+class DeleteThing(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ThingSerializer
+    queryset = Thing.objects.all()
 
 
 """
