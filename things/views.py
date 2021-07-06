@@ -23,6 +23,9 @@ from rest_framework.permissions import (
     DjangoModelPermissions,
 )
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 # 之後要獨立程一個app
@@ -97,10 +100,25 @@ class ThingSearch(generics.ListAPIView):
     search_fields = ["^slug"]
 
 
-class CreateThing(generics.CreateAPIView):
+"""class CreateThing(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Thing.objects.all()
-    serializer_class = ThingSerializer
+    serializer_class = ThingSerializer"""
+
+
+class CreateThing(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    # to support multipart html data
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        # print(request.data)
+        serializer = ThingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AdminThingDetail(generics.RetrieveAPIView):

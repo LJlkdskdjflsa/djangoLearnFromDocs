@@ -21,4 +21,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class ThingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thing
-        fields = ("pk", "category", "owner", "title", "content", "slug", "status")
+        fields = (
+            "pk",
+            "category",
+            "owner",
+            "title",
+            "image",
+            "content",
+            "slug",
+            "status",
+        )

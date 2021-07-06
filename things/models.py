@@ -5,6 +5,11 @@ from helpers.models import TrackingModel
 
 # from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+
+# the location to upload file
+def upload_to(instance, filename):
+    return "things/{filename}".format(filename=filename)
 
 
 class Category(TrackingModel):
@@ -39,4 +44,7 @@ class Thing(TrackingModel):
     title = models.CharField(max_length=250)
     content = models.TextField(null=True)
     slug = models.SlugField(max_length=250, unique=True)
+    image = models.ImageField(
+        _("Image"), upload_to=upload_to, default="things/default.jpeg"
+    )
     status = models.CharField(max_length=50, choices=options, default="using")
