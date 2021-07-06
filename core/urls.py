@@ -5,6 +5,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from rest_framework.schemas import get_schema_view
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -17,4 +19,13 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # verify HMAC-signed tokens without having access to your signing key
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    # api docs
+    path(
+        "schema",
+        get_schema_view(
+            title="thingsAPI", description="API for the things", version="1.0.0"
+        ),
+        name="openapi-schema",
+    ),
+    path("docs/", include_docs_urls(title="ThingAPI")),
 ]

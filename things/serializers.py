@@ -10,6 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
             # "_id",
             "id",
             "name",
+            "slug",
             "created_at",
             "updated_at",
             "create_by_id",

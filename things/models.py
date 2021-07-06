@@ -9,6 +9,7 @@ from django.conf import settings
 
 class Category(TrackingModel):
     name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=250, unique=True)
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.SET_NULL, default=None
     )
@@ -37,5 +38,5 @@ class Thing(TrackingModel):
     )
     title = models.CharField(max_length=250)
     content = models.TextField(null=True)
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(max_length=250, unique=True)
     status = models.CharField(max_length=50, choices=options, default="using")

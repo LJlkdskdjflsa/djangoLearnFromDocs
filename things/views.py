@@ -12,6 +12,21 @@ from rest_framework.permissions import (
 )
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    BasePermission,
+    IsAdminUser,
+    DjangoModelPermissions,
+)
+from rest_framework import viewsets
+from rest_framework import filters
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework import filters
 
 # 之後要獨立程一個app
 class PostUserWritePermission(BasePermission):
@@ -25,24 +40,14 @@ class PostUserWritePermission(BasePermission):
         return obj.owner == request.user
 
 
-class CategoriesListlView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class CategoriesDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class ThingsList(viewsets.ModelViewSet):
+class CategoriesList(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Thing.objects.all()
-    serializer_class = ThingSerializer
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
     # Define custome queryset
     def get_queryset(self):
-        return Thing.objects.all()
+        return Category.objects.all()
 
     # Define custome get object
     def get_object(self, queryset=None, **kwargs):
@@ -50,17 +55,91 @@ class ThingsList(viewsets.ModelViewSet):
         return get_object_or_404(Thing, slug=item)
 
 
-# replace with viewsets
+class ThingList(generics.ListAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = ThingSerializer
+
+    def get_queryset(self):
+        try:
+            user = self.request.user
+            # staff can see all
+            if user.is_staff:
+                return Thing.objects.all()
+            # normal user can only get his
+            return Thing.objects.filter(owner=user)
+        except:
+            return Thing.objects.all()
+
+
+class ThingDetail(generics.ListAPIView):
+    serializer_class = ThingSerializer
+
+    def get_queryset(self):
+        slug = self.request.query_params.get("slug", None)
+        print(slug)
+        return Thing.objects.filter(slug=slug)
+
+
+class ThingListDetailfilter(generics.ListAPIView):
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["^slug"]
+
+    # '^' Starts-with search.
+    # '=' Exact matches.
+    # '@' Full-text search. (Currently only supported Django's PostgreSQL backend.)
+    # '$' Regex search.
+
+
+class ThingSearch(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["^slug"]
+
+
 """
-class ThingsListlView(generics.ListCreateAPIView, IsAuthenticatedOrReadOnly):
+class ThingsList(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
 
+    # Define custome queryset
+    def get_queryset(self):
+        # slug = self.kwargs["pk"]
+        # print(slug)
+        try:
+            user = self.request.user
+            # staff can see all
+            if user.is_staff:
+                return Thing.objects.all()
+            # normal user can only get his
+            return Thing.objects.filter(owner=user)
+        except:
+            return Thing.objects.all()
 
-class ThingsDetailView(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
-    permission_classes = [PostUserWritePermission]
+    # very ugly need to be modify
+    def retrieve(self, request, *args, **kwargs):
+        print("retrive")
+        print(self.kwargs["pk"])
+        print(self.kwargs.get("pk"))
+        print(Thing.objects.filter(pk=self.kwargs.get("pk")))
+        instance = self.get_object(Thing.objects.filter(pk=self.kwargs.get("pk")))
+        print(instance)
+        # instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        # serializer = self.get_serializer(Thing.objects.filter(pk=self.kwargs.get("pk")))
+        return Response(serializer.data)
+        # return Thing.objects.filter(pk=self.kwargs.get("pk"))
 
-    queryset = Thing.objects.all()
-    serializer_class = ThingSerializer
+    # Define custome get object
+    def get_object(self, queryset=None, **kwargs):
+        print("get_obj")
+        print(kwargs)
+        print(queryset)
+        item = self.kwargs.get("pk")
+        print(item)
+        return get_object_or_404(Thing, slug=item)
 """

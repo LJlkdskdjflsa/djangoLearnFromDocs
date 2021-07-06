@@ -6,18 +6,12 @@ from . import views
 
 app_name = "things"
 
-router = DefaultRouter()
+"""router = DefaultRouter()
 router.register("", views.ThingsList, basename="thing")
-urlpatterns = router.urls
-
-"""urlpatterns = [
-    # path("upload_file", csrf_exempt(views.upload_file), name="upload_file"),
-    path(
-        "category/<int:pk>/",
-        views.CategoriesDetailView.as_view(),
-        name="detail-category-create",
-    ),
-    path("category", views.CategoriesListlView.as_view(), name="list-category-create"),
-    # path("<int:pk>/", views.ThingsDetailView.as_view(), name="detail-create"),
-    # path("", views.ThingsListlView.as_view(), name="list-create"),
-]"""
+router.register("category/", views.CategoriesList, basename="category")
+urlpatterns = router.urls"""
+urlpatterns = [
+    path("detail/", views.ThingDetail.as_view(), name="detailcreate"),
+    path("search/", views.ThingListDetailfilter.as_view(), name="thingsearch"),
+    path("", views.ThingList.as_view(), name="listcreate"),
+]
