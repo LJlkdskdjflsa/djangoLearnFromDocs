@@ -44,7 +44,7 @@ class Thing(TrackingModel):
     title = models.CharField(max_length=250)
     content = models.TextField(null=True)
     slug = models.SlugField(max_length=250, unique=True)
-    image = models.ImageField(
+    image = models.FileField(
         _("Image"), upload_to=upload_to, default="things/default.jpeg"
     )
     status = models.CharField(max_length=50, choices=options, default="using")
