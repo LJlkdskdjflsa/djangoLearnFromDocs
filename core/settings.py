@@ -22,13 +22,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # build in
     "django.contrib.admin",
+    # use costome admin config
+    # "things.apps.ThingsAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # support
     "helpers",
+    # function
     "records",
     "tags",
     "things",
@@ -85,7 +90,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "NAME": config("DATABASE_NAME"),
@@ -98,7 +103,7 @@ DATABASES = {
         "NAME": "mydatabase",
     }
 }
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

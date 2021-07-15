@@ -1,5 +1,6 @@
 # from djongo import models
-from django.db import models
+# from django.db import models
+from djongo import models
 
 # from django.contrib.auth.models import User
 from users.models import User
@@ -31,3 +32,5 @@ class TrackingModel(models.Model):
         abstract = True
         # set the model be abstract
         ordering = ("-created_at",)
+
+    objects = models.DjongoManager()

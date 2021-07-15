@@ -6,16 +6,27 @@ from django import forms
 from django.db import models
 
 
+from django.contrib import admin
+from . import models
+
+# user admin site
+# write custom adin site
+class UserAdminArea(admin.AdminSite):
+    site_header = "User Admin area"
+
+
+user_site = UserAdminArea(name="UserAdmin")
+
+# register to default admin
 class UserAdminConfig(UserAdmin):
     model = User
     search_fields = (
         "email",
         "username",
-        "first_name",
     )
-    list_filter = ("email", "username", "first_name", "is_active", "is_staff")
+    list_filter = ("email", "username", "is_active", "is_staff")
     ordering = ("-start_date",)
-    list_display = ("email", "username", "first_name", "is_active", "is_staff")
+    list_display = ("email", "username", "is_active", "is_staff")
     fieldsets = (
         (
             None,
@@ -23,16 +34,16 @@ class UserAdminConfig(UserAdmin):
                 "fields": (
                     "email",
                     "username",
-                    "first_name",
                 )
             },
         ),
         ("Permissions", {"fields": ("is_staff", "is_active")}),
         ("Personal", {"fields": ("about",)}),
     )
-    formfield_overrides = {
-        models.TextField: {"widget": Textarea(attrs={"rows": 20, "cols": 60})},
-    }
+    # AttributeError: module 'users.models' has no attribute 'TextField' ?
+    # formfield_overrides = {
+    #     models.TextField: {"widget": Textarea(attrs={"rows": 20, "cols": 60})},
+    # }
     add_fieldsets = (
         (
             None,
@@ -41,7 +52,6 @@ class UserAdminConfig(UserAdmin):
                 "fields": (
                     "email",
                     "username",
-                    "first_name",
                     "password1",
                     "password2",
                     "is_active",

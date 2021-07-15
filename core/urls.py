@@ -11,6 +11,8 @@ from rest_framework.documentation import include_docs_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
+from things.admin import things_site
+from users.admin import user_site
 
 
 urlpatterns = [
@@ -18,18 +20,15 @@ urlpatterns = [
     path("auth/", include("drf_social_oauth2.urls", namespace="drf")),
     # project management
     path("admin/", admin.site.urls),
+    # the custome admin.site
+    path("things/admin/", things_site.urls),
+    path("users/admin/", user_site.urls),
     # OAuth provider
     path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     # app functions
     path("things/", include("things.urls"), name="things"),
-    #
-    path("auth/", include("rest_framework.urls"), name="rest_framework"),
+    # user
     path("user/", include("users.urls"), name="users"),
-    # simple jwt api token management
-    # path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # verify HMAC-signed tokens without having access to your signing key
-    # path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     # api docs
     path(
         "schema",
@@ -42,3 +41,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# admin.site.index_title = "The Things"
+# admin.site.site_header = "The Things Admin"
+# admin.site.site_title = "Things"

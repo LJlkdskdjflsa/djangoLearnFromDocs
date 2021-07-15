@@ -3,6 +3,8 @@ from users.models import User
 from django.db import models
 from helpers.models import TrackingModel
 
+from djongo import models
+
 # from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -13,6 +15,7 @@ def upload_to(instance, filename):
 
 
 class Category(TrackingModel):
+    _id = models.ObjectIdField()
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=250, unique=True)
     parent = models.ForeignKey(
@@ -24,6 +27,7 @@ class Category(TrackingModel):
 
 
 class Thing(TrackingModel):
+    _id = models.ObjectIdField()
     options = (
         ("planing", "Planing"),
         ("making", "Making"),
@@ -48,3 +52,6 @@ class Thing(TrackingModel):
         _("Image"), upload_to=upload_to, default="things/default.jpeg"
     )
     status = models.CharField(max_length=50, choices=options, default="using")
+
+    def __str__(self):
+        return self.title
