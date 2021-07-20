@@ -11,8 +11,9 @@ from rest_framework.documentation import include_docs_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
-from things.admin import things_site
-from users.admin import user_site
+
+# from things.admin import things_site
+# from users.admin import user_site
 
 
 urlpatterns = [
@@ -21,8 +22,8 @@ urlpatterns = [
     # project management
     path("admin/", admin.site.urls),
     # the custome admin.site
-    path("things/admin/", things_site.urls),
-    path("users/admin/", user_site.urls),
+    # path("things/admin/", things_site.urls),
+    # path("users/admin/", user_site.urls),
     # OAuth provider
     path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     # app functions

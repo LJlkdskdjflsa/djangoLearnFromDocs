@@ -40,21 +40,6 @@ class PostUserWritePermission(BasePermission):
         return obj.owner == request.user
 
 
-class CategoriesList(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-    # Define custome queryset
-    def get_queryset(self):
-        return Category.objects.all()
-
-    # Define custome get object
-    def get_object(self, queryset=None, **kwargs):
-        item = self.kwargs.get("pk")
-        return get_object_or_404(Thing, slug=item)
-
-
 class ThingList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ThingSerializer
@@ -139,46 +124,19 @@ class DeleteThing(generics.RetrieveDestroyAPIView):
     queryset = Thing.objects.all()
 
 
-"""
-class ThingsList(viewsets.ModelViewSet):
+# Category
+
+
+class CategoriesList(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Thing.objects.all()
-    serializer_class = ThingSerializer
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
     # Define custome queryset
     def get_queryset(self):
-        # slug = self.kwargs["pk"]
-        # print(slug)
-        try:
-            user = self.request.user
-            # staff can see all
-            if user.is_staff:
-                return Thing.objects.all()
-            # normal user can only get his
-            return Thing.objects.filter(owner=user)
-        except:
-            return Thing.objects.all()
-
-    # very ugly need to be modify
-    def retrieve(self, request, *args, **kwargs):
-        print("retrive")
-        print(self.kwargs["pk"])
-        print(self.kwargs.get("pk"))
-        print(Thing.objects.filter(pk=self.kwargs.get("pk")))
-        instance = self.get_object(Thing.objects.filter(pk=self.kwargs.get("pk")))
-        print(instance)
-        # instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        # serializer = self.get_serializer(Thing.objects.filter(pk=self.kwargs.get("pk")))
-        return Response(serializer.data)
-        # return Thing.objects.filter(pk=self.kwargs.get("pk"))
+        return Category.objects.all()
 
     # Define custome get object
     def get_object(self, queryset=None, **kwargs):
-        print("get_obj")
-        print(kwargs)
-        print(queryset)
-        item = self.kwargs.get("pk")
-        print(item)
+        item = self.kwargs.get("_id")
         return get_object_or_404(Thing, slug=item)
-"""

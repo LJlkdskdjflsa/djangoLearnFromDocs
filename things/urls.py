@@ -5,12 +5,15 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = "things"
-
-"""router = DefaultRouter()
-router.register("", views.ThingsList, basename="thing")
+# category
+router = DefaultRouter()
+# router.register("", views.ThingsList, basename="thing")
 router.register("category/", views.CategoriesList, basename="category")
-urlpatterns = router.urls"""
-urlpatterns = [
+urlpatterns = router.urls
+
+# things
+urlpatterns += [
+    # things
     path("detail/", views.ThingDetail.as_view(), name="detailcreate"),
     path("search/", views.ThingListDetailfilter.as_view(), name="thingsearch"),
     path("", views.ThingList.as_view(), name="listcreate"),
@@ -23,4 +26,7 @@ urlpatterns = [
     ),
     path("admin/edit/<int:pk>/", views.EditThing.as_view(), name="editThing"),
     path("admin/delete/<int:pk>/", views.DeleteThing.as_view(), name="deleteThing"),
+    # category
 ]
+
+print(urlpatterns)
