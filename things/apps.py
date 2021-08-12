@@ -1,9 +1,10 @@
 from django.apps import AppConfig
-from django.contrib.admin.apps import AdminConfig
+
+# from django.contrib.admin.apps import AdminConfig
 
 # write custome admin app
-class ThingsAdminConfig(AdminConfig):
-    default_site = "things.admin.ThingsAdminArea"
+# class ThingsAdminConfig(AdminConfig):
+#     default_site = "things.admin.ThingsAdminArea"
 
 
 class ThingsConfig(AppConfig):
